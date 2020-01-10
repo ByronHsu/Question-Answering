@@ -2,3 +2,4 @@ checkpoints/
 *.pt
 .DS_Store
 __pycache__
+runs/

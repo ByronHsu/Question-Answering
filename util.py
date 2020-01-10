@@ -26,7 +26,7 @@ def parse_xlsx(path):
         right_idx = df.iloc[i, 7]
 
         for j in range(4):
-            choice = df.iloc[i, 3 + j]
+            choice = str(df.iloc[i, 3 + j])
             all_senA.append(article + question)
             all_senB.append(choice)
             # 0 indicates sequence B is a continuation of sequence A, 1 indicates sequence B is a random sequence.
@@ -34,7 +34,6 @@ def parse_xlsx(path):
                 all_isNext.append(0)
             else:
                 all_isNext.append(1)
-
 
     return all_senA, all_senB, all_isNext
 
@@ -57,7 +56,7 @@ class Dataset(data.Dataset):
     def __init__(self, tokenizer):
         self.array = self._parse_data()
         self.tokenizer = tokenizer
-        print('finish parsing data')
+        print('Finish parsing data')
         
     def _parse_data(self):
         array = []
@@ -95,7 +94,7 @@ def test_parse_xlsx(path):
         question = df.iloc[i, 2]
 
         for j in range(4):
-            choice = df.iloc[i, 3 + j]
+            choice = str(df.iloc[i, 3 + j])
             all_senA.append(article + question)
             all_senB.append(choice)
             all_id.append(_id)
@@ -123,7 +122,7 @@ class TestDataset(data.Dataset):
     def __init__(self, tokenizer):
         self.array = self._parse_data()
         self.tokenizer = tokenizer
-        print('finish parsing data')
+        print('Finish parsing data')
         
     def _parse_data(self):
         array = []

@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import pandas as pd
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-chinese')
-model = BertForNextSentencePrediction.from_pretrained('bert-base-chinese')
+model = BertForNextSentencePrediction.from_pretrained('checkpoints')
 
 dataset = TestDataset(tokenizer)
 # batch size is fixed to 4, because each question has four options

@@ -3,6 +3,7 @@ from os.path import join
 from transformers import *
 import torch
 import torch.utils.data as data
+import random
 
 # =====================
 # For Training
@@ -34,7 +35,6 @@ def parse_xlsx(path):
                 all_isNext.append(0)
             else:
                 all_isNext.append(1)
-
     return all_senA, all_senB, all_isNext
 
 def custom_collate(tokenizer):
@@ -54,19 +54,33 @@ def custom_collate(tokenizer):
 
 class Dataset(data.Dataset):
     def __init__(self, tokenizer):
-        self.array = self._parse_data()
+        
+        self.array, self.pos_idx, self.neg_idx = self._parse_data()
         self.tokenizer = tokenizer
         print('Finish parsing data')
         
     def _parse_data(self):
         array = []
+
         for i in range(6):
             senA, senB, isNext = parse_xlsx(join('data', '{}.xlsx'.format(i + 1)))
             array += list(zip(senA, senB, isNext))
-        return array
+
+        _, _, all_isNext = zip(*array)
+
+        pos_idx = [i for (i, val) in enumerate(all_isNext) if val == 0]
+        neg_idx = [i for (i, val) in enumerate(all_isNext) if val == 1]
+
+        return array, pos_idx, neg_idx
 
     def __getitem__(self, i):
-        item = self.array[i]
+        
+        if i % 2 == 0:
+            idx = random.choice(self.pos_idx)
+        else:
+            idx = random.choice(self.neg_idx)
+
+        item = self.array[idx]
         return item
     
     def __len__(self):
